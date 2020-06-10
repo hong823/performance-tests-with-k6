@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: performance-tests
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+        - name: performance-tests
+          image: example.docker.com/performance-test:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 1024Mi
+            requests:
+              cpu: 1000m
+              memory: 1024Mi
+      restartPolicy: Never        

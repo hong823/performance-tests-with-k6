@@ -1,0 +1,65 @@
+# InfluxDB
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb
+spec:
+  type: ClusterIP
+  selector:
+    component: influxdb
+  ports:
+    - port: 8086
+      targetPort: 8086
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: influxdb
+spec:
+  selector:
+    matchLabels:
+      component: influxdb
+  template:
+    metadata:
+      labels:
+        component: influxdb
+    spec:
+      containers:
+        - name: influxdb
+          image: influxdb:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8086
+          env:
+            - name: INFLUXDB_DB
+              value: db0
+            - name: INFLUXDB_ADMIN_USER
+              value: influx
+            - name: INFLUXDB_ADMIN_PASSWORD
+              value: secret
+---
+# Grafana
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  selector:
+    matchLabels:
+      component: grafana
+  template:
+    metadata:
+      labels:
+        component: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              value: grafana
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: secret

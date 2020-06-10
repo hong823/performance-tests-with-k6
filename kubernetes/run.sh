@@ -1,0 +1,1 @@
+k6 run src/01_basic.js --out influxdb=http://influxdb:8086/loadtestk6
